@@ -1,5 +1,6 @@
 'use strict';
 
+(function () {
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
 
@@ -47,3 +48,4 @@ function renderWizards() {
   }
 }
 renderWizards();
+})();
