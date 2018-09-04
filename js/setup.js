@@ -36,16 +36,20 @@
 
   var wizards = getCharacters();
 
-  function renderWizards() {
-    for (var i = 0; i < charCount; i++) {
-      var wizardElement = similarWizardTemplate.cloneNode(true);
+  function renderWizard(wizard) {
+    var wizardElement = similarWizardTemplate.cloneNode(true);
 
-      wizardElement.querySelector('.setup-similar-label').textContent = wizards[i].name;
-      wizardElement.querySelector('.wizard-coat').style.fill = wizards[i].coatColor;
-      wizardElement.querySelector('.wizard-eyes').style.fill = wizards[i].eyeColor;
+    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyeColor;
 
-      similarListElement.appendChild(wizardElement);
-    }
+    return wizardElement;
   }
-  renderWizards();
+
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < wizards.length; i++) {
+    fragment.appendChild(renderWizard(wizards[i]));
+  }
+  similarListElement.appendChild(fragment);
+
 })();
