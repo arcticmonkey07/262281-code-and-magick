@@ -2,7 +2,6 @@
 
 (function () {
   var userDialog = document.querySelector('.setup');
-  userDialog.classList.remove('hidden');
 
   document.querySelector('.setup-similar').classList.remove('hidden');
 
@@ -63,6 +62,7 @@
   var setupOpen = document.querySelector('.setup-open');
   var setup = document.querySelector('.setup');
   var setupClose = document.querySelector('.setup-close');
+  var userNameInput = setup.querySelector('.setup-user-name');
 
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -100,9 +100,11 @@
     }
   });
 
-  // ---- validation -----
+  userNameInput.onfocus = function () {
+    document.removeEventListener('keydown', onPopupEscPress);
+  };
 
-  var userNameInput = setup.querySelector('.setup-user-name');
+  // ---- validation -----
 
   userNameInput.addEventListener('invalid', function () {
     if (userNameInput.validity.tooShort) {
