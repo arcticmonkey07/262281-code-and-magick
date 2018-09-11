@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var userDialog = document.querySelector('.setup');
-
   document.querySelector('.setup-similar').classList.remove('hidden');
 
   var similarListElement = document.querySelector('.setup-similar-list');
