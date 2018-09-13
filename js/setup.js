@@ -148,8 +148,9 @@
   });
 
   wizardFireball.addEventListener('click', function () {
-    wizardFireball.style.background = fireball[getRandomInt(fireball)];
-    wizardFireballInput.value = wizardFireball.style.background;
+    var fireballColor = fireball[getRandomInt(fireball)];
+    wizardFireball.style.background = fireballColor;
+    wizardFireballInput.value = fireballColor;
   });
 
 })();
