@@ -61,6 +61,8 @@
   var setup = document.querySelector('.setup');
   var setupClose = document.querySelector('.setup-close');
   var userNameInput = setup.querySelector('.setup-user-name');
+  var topSetupPosition = setup.style.top;
+  var leftSetupPosition = setup.style.left;
 
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -79,6 +81,8 @@
   };
 
   setupOpen.addEventListener('click', function () {
+    setup.style.top = topSetupPosition;
+    setup.style.left = leftSetupPosition;
     openPopup();
   });
 
