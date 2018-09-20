@@ -65,12 +65,12 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(successHandler, errorHandler);
+  window.backend.load(successHandler, errorHandler);
 
   // отправляем данные формы, отменяем действие формы по умолчанию, закрываем диалог
   var form = document.querySelector('.setup-wizard-form');
   form.addEventListener('submit', function (evt) {
-    window.save(new FormData(form), function () {
+    window.backend.save(new FormData(form), function () {
       window.setup.classList.add('hidden');
     });
     evt.preventDefault();
