@@ -7,47 +7,74 @@
   var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content;
 
+  // var names = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+  // var lastNames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+  // var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  // var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
+  // var charCount = 4;
 
-  var names = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var lastNames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  var coatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var eyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
-  var charCount = 4;
+  // function getCharacterAttribute(arr) {
+  //   var randInt = Math.floor(Math.random() * arr.length);
+  //   return arr[randInt];
+  // }
 
-  function getCharacterAttribute(arr) {
-    var randInt = Math.floor(Math.random() * arr.length);
-    return arr[randInt];
-  }
+  // function getCharacters() {
+  //   var charArr = [];
+  //   for (var i = 0; i < charCount; i++) {
+  //     charArr.push({
+  //       name: getCharacterAttribute(names) + ' ' + getCharacterAttribute(lastNames),
+  //       coatColor: getCharacterAttribute(coatColors),
+  //       eyeColor: getCharacterAttribute(eyesColors),
+  //     });
+  //   }
+  //   return charArr;
+  // }
 
-  function getCharacters() {
-    var charArr = [];
-    for (var i = 0; i < charCount; i++) {
-      charArr.push({
-        name: getCharacterAttribute(names) + ' ' + getCharacterAttribute(lastNames),
-        coatColor: getCharacterAttribute(coatColors),
-        eyeColor: getCharacterAttribute(eyesColors),
-      });
-    }
-    return charArr;
-  }
-
-  var wizards = getCharacters();
+  // var wizards = getCharacters();
 
   function renderWizard(wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
     wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyeColor;
 
     return wizardElement;
   }
 
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < wizards.length; i++) {
-    fragment.appendChild(renderWizard(wizards[i]));
-  }
-  similarListElement.appendChild(fragment);
+  var successHandler = function (wizards) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < 4; i++) {
+      fragment.appendChild(renderWizard(wizards[i]));
+    }
+    similarListElement.appendChild(fragment);
+
+    window.setup.querySelector('.setup-similar').classList.remove('hidden');
+  };
+
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(successHandler, errorHandler);
+
+  // отправляем данные формы, отменяем действие формы по умолчанию, закрываем диалог
+  var form = document.querySelector('.setup-wizard-form');
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), function () {
+      window.setup.classList.add('hidden');
+    });
+    evt.preventDefault();
+  });
 
 })();
 
@@ -58,11 +85,11 @@
   var ENTER_KEYCODE = 13;
 
   var setupOpen = document.querySelector('.setup-open');
-  var setup = document.querySelector('.setup');
+  window.setup = document.querySelector('.setup');
   var setupClose = document.querySelector('.setup-close');
-  var userNameInput = setup.querySelector('.setup-user-name');
-  var topSetupPosition = setup.style.top;
-  var leftSetupPosition = setup.style.left;
+  var userNameInput = window.setup.querySelector('.setup-user-name');
+  var topSetupPosition = window.setup.style.top;
+  var leftSetupPosition = window.setup.style.left;
 
   var onPopupEscPress = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
@@ -71,18 +98,18 @@
   };
 
   var openPopup = function () {
-    setup.classList.remove('hidden');
+    window.setup.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
   };
 
   var closePopup = function () {
-    setup.classList.add('hidden');
+    window.setup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
   setupOpen.addEventListener('click', function () {
-    setup.style.top = topSetupPosition;
-    setup.style.left = leftSetupPosition;
+    window.setup.style.top = topSetupPosition;
+    window.setup.style.left = leftSetupPosition;
     openPopup();
   });
 
